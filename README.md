@@ -3,5 +3,5 @@ How would you like to use a Machine Learning component in your selenium tests. I
 
 Flerovium brings ML into your tests, by seeing the page like a human, instead of defining selectors, you define labels. Information, which Fleroviums ML libraries use to figure out where to click and type. 
 
-Those gnarly xpath selectors become obsolete and you just maintain visual data and flerovium figures the rest.
+Those gnarly xpath selectors become obsolete and you just maintain visual data and flerovium figures out the rest.
 
