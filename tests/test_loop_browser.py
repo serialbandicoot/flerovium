@@ -13,10 +13,10 @@ class TestStringMethods(unittest.TestCase):
         self.driver.get("https://www.python.org")
 
     def tearDown(self):
-        self.driver.close
+        self.driver.close()
 
     def test_find_by_label(self):
         flerovium = Flerovium(self.driver)
-        e = flerovium.find_by_label("About")
+        e = flerovium.find_by_label("Let's Create")
         e.click()
         assert self.driver.title == "About Python™ | Python.org"
