@@ -1,5 +1,3 @@
-
-
 from src.html import Tag
 from src.image_text import ImageText
 

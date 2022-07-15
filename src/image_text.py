@@ -9,7 +9,7 @@ import pytesseract as pt
 class ImageText:
 
     tmp_image = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)), "..", "images", "image.png"
+        os.path.dirname(os.path.realpath(__file__)), "..", "data", "images", "image.png"
     )
 
     def __init__(self, driver: webdriver):
@@ -24,6 +24,7 @@ class ImageText:
                 img_file = os.path.join(
                     os.path.dirname(os.path.realpath(__file__)),
                     "..",
+                    "data",
                     "images",
                     f"{text_search.lower()}.png",
                 )

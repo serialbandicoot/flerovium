@@ -17,6 +17,6 @@ class TestStringMethods(unittest.TestCase):
 
     def test_find_by_label(self):
         flerovium = Flerovium(self.driver)
-        e = flerovium.find_by_label("Let's Create")
+        e = flerovium.find_by_label("About")
         e.click()
         assert self.driver.title == "About Python™ | Python.org"
