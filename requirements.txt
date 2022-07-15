@@ -1,3 +1,4 @@
 selenium
 Pillow
 pytesseract
+opencv-python

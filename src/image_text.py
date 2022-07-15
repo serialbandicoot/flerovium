@@ -4,7 +4,7 @@ from src.file_helper import FileHelper
 from src.html import HTML, Tag
 import os
 import pytesseract as pt
-
+import cv2
 
 class ImageText:
 
@@ -30,8 +30,14 @@ class ImageText:
                 )
 
                 tmp = FileHelper.create_image_temp(self.tmp_image, e)
-                img = Img.open(tmp)
-                img_text = pt.image_to_string(img).strip()
+                img = cv2.imread(tmp)
+                
+                (h, w) = img.shape[:2]
+                img = cv2.resize(img, (w*3, h*3))
+                gry = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                thr = cv2.threshold(gry, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+                img_text = pt.image_to_string(thr).strip()
+
                 if img_text.lower() == text_search.lower():
                     element = e
                     FileHelper.save_image(self.tmp_image, img_file)
