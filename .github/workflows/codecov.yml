@@ -22,6 +22,8 @@ jobs:
         pip install -r test-requirements.txt
         pip install -r requirements.txt
         py.test --cov-report term --cov=./ --cov-report=xml
+        sudo apt-get update
+        sudo apt-get install libleptonica-dev tesseract-ocr tesseract-ocr-dev libtesseract-dev python3-pil tesseract-ocr-eng tesseract-ocr-script-latn
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
