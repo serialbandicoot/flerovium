@@ -10,5 +10,5 @@ class Tag(Enum):
 
 class HTML:
     @staticmethod
-    def get(driver: webdriver, tag: str):
+    def get(driver: webdriver, tag: Tag):
         return driver.find_elements(By.TAG_NAME, tag.value)

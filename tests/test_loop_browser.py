@@ -1,5 +1,3 @@
-import pytest
-
 from flerovium import Flerovium
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -18,7 +16,6 @@ class TestStringMethods(unittest.TestCase):
         self.driver.close
 
     def test_find_by_label(self):
-
         flerovium = Flerovium(self.driver)
         e = flerovium.find_by_label("About")
         e.click()
