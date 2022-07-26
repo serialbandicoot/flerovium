@@ -4,8 +4,7 @@ import os
 class FileHelper:
     @staticmethod
     def create_image_temp(file: str, element) -> str:
-        if os.path.exists(file):
-            os.remove(file)
+        FileHelper.remove_image(file)
         f = open(file, "wb")
         f.write(element.screenshot_as_png)
         f.close()
@@ -16,3 +15,8 @@ class FileHelper:
         if os.path.exists(after):
             os.remove(after)
         os.rename(before, after)
+
+    @staticmethod
+    def remove_image(file: str):
+        if os.path.exists(file):
+            os.remove(file)

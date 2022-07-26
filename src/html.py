@@ -14,3 +14,15 @@ class HTML:
     @staticmethod
     def get(driver: webdriver, tag: Tag):
         return driver.find_elements(By.TAG_NAME, tag.value)
+
+    @staticmethod
+    def find_element_by_link(driver: webdriver, value: str):
+        return driver.find_element(By.LINK_TEXT, value)
+
+    @staticmethod
+    def find_element_by_name(driver: webdriver, value: str):
+        return driver.find_element(By.NAME, value)
+
+    @staticmethod
+    def find_element_by_id(driver: webdriver, value: str):
+        return driver.find_element(By.ID, value)

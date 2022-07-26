@@ -2,3 +2,5 @@ selenium
 Pillow
 pytesseract
 opencv-python
+pysondb
+pixelmatch

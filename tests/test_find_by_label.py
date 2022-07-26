@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options
 import unittest
 
 
-class TestStringMethods(unittest.TestCase):
+class TestFindByLabel(unittest.TestCase):
     def setUp(self):
         options = Options()
         options.headless = True
@@ -27,4 +27,6 @@ class TestStringMethods(unittest.TestCase):
         search.send_keys("Arrays")
         go = flerovium.find_by_label("Go")
         go.click()
-        assert self.driver.current_url == "https://www.python.org/search/?q=Arrays&submit="
+        assert (
+            self.driver.current_url == "https://www.python.org/search/?q=Arrays&submit="
+        )
