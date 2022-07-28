@@ -1,5 +1,7 @@
+from ast import expr
 from cProfile import label
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from PIL import Image as Img
 from src.file_helper import FileHelper
 from src.html import HTML, Tag
@@ -22,16 +24,14 @@ class ImageText:
         es = HTML.get(self.driver, tag)
         element = None
         for e in es:
+            img_file = os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "..",
+                "data",
+                "images",
+                f"{label}.png",
+            )
             try:
-
-                img_file = os.path.join(
-                    os.path.dirname(os.path.realpath(__file__)),
-                    "..",
-                    "data",
-                    "images",
-                    f"{label}.png",
-                )
-
                 tmp = FileHelper.create_image_temp(self.tmp_image, e)
                 img = cv2.imread(tmp)
 
@@ -41,6 +41,7 @@ class ImageText:
                 thr = cv2.threshold(
                     gry, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
                 )[1]
+            
                 img_text = pt.image_to_string(thr).strip()
 
                 if img_text.lower() == label.lower():
@@ -48,8 +49,8 @@ class ImageText:
                     FileHelper.save_image(self.tmp_image, img_file)
                     DB().save_data(label, e)
                     break
-
-            except Exception as ex:
-                print(ex)
+            except WebDriverException as exe:
+                exe
                 pass
+
         return element

@@ -26,6 +26,7 @@ class DB:
             "e_id": element.get_attribute("id"),
             "name": element.get_attribute("name"),
             "placeholder": element.get_attribute("placeholder"),
+            "class": element.get_attribute("class"),
         }
         if self.get_by_label(label) is None:
             store.add(data)
@@ -53,13 +54,13 @@ class DB:
             "..",
             "data",
             "images",
-            label['image_label_name'],
+            label["image_label_name"],
         )
         if os.path.exists(img_path):
             os.remove(img_path)
 
         return store.deleteById(id)
 
-    def put_label(self, id, update = {}):
+    def put_label(self, id, update={}):
         store = self._get_or_create()
         return store.updateById(id, update)

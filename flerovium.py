@@ -6,11 +6,13 @@ from src.html import HTML
 from src.image_compare import ImageCompare, MatchType
 import os
 from selenium import webdriver
-
+from src.html import HTML
 
 class Flerovium:
     def __init__(self, driver: webdriver):
         self.driver = driver
+        HTML.release_driver_on_loaded(driver)
+
 
     def _evaludate_by_selenium(self, label: str):
         # 1. Check JSON Data
@@ -41,6 +43,11 @@ class Flerovium:
                 e = HTML.find_element_by_name(self.driver, label_data["id"])
                 if e.text == label_data["text"]:
                     return e
+
+        if label_data["class"] != None:
+            e = HTML.find_element_by_class_name(self.driver, label_data["class"])
+            if e.text == label_data["text"]:
+                return e
 
         return None
 
@@ -102,5 +109,9 @@ class Flerovium:
             tag_button = it.find_by_tag(Tag.BUTTON, label)
             if tag_button:
                 return tag_button
+
+            tag_div = it.find_by_tag(Tag.DIV, label)
+            if tag_div:
+                return tag_div
 
         return None
