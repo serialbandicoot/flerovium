@@ -6,7 +6,6 @@ import os
 
 
 class TestImageCompare(unittest.TestCase):
-    
     def setUp(self):
         self.about_path = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
@@ -14,7 +13,7 @@ class TestImageCompare(unittest.TestCase):
             "images",
             "about.png",
         )
-    
+
     def test_image_compare_bad(self):
         about2_path = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),

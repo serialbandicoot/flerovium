@@ -21,6 +21,18 @@ class TestFindByLabel(unittest.TestCase):
         e.click()
         assert self.driver.title == "About Python™ | Python.org"
 
+    def test_find_by_label_downloads(self):
+        flerovium = Flerovium(self.driver)
+        e = flerovium.find_by_label("Downloads")
+        e.click()
+        assert self.driver.title == "Download Python | Python.org"
+
+    def test_find_by_label_community(self):
+        flerovium = Flerovium(self.driver)
+        e = flerovium.find_by_label("Community")
+        e.click()
+        assert self.driver.title == "Community | Python.org"
+
     def test_find_by_label_search(self):
         flerovium = Flerovium(self.driver)
         search = flerovium.find_by_label("Search")

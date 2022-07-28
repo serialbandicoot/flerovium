@@ -4,3 +4,5 @@ pytesseract
 opencv-python
 pysondb
 pixelmatch
+flask
+flask-cors
