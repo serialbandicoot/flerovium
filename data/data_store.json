@@ -1,52 +1,16 @@
 {
    "data": [
       {
-         "label": "Community",
-         "image_label_name": "Community.png",
-         "tag_name": "a",
-         "accessible_name": "Community",
-         "text": "Community",
-         "e_id": "",
-         "name": "",
-         "placeholder": null,
-         "class": "",
-         "id": 197728286008646924
-      },
-      {
-         "label": "Downloads",
-         "image_label_name": "Downloads.png",
-         "tag_name": "a",
-         "accessible_name": "Downloads",
-         "text": "Downloads",
-         "e_id": "",
-         "name": "",
-         "placeholder": null,
-         "class": "",
-         "id": 194383121165741314
-      },
-      {
-         "label": "Search",
-         "image_label_name": "Search.png",
+         "label": "Username",
+         "image_label_name": "Username.png",
          "tag_name": "input",
-         "accessible_name": "Search This Site",
+         "accessible_name": "Username",
          "text": "",
-         "e_id": "id-search-field",
-         "name": "q",
-         "placeholder": "Search",
-         "class": "search-field",
-         "id": 221823928242437490
-      },
-      {
-         "label": "Go",
-         "image_label_name": "Go.png",
-         "tag_name": "button",
-         "accessible_name": "GO",
-         "text": "GO",
-         "e_id": "submit",
-         "name": "submit",
-         "placeholder": null,
-         "class": "search-button",
-         "id": 274791718075060332
+         "e_id": "",
+         "name": "",
+         "placeholder": "Username",
+         "class": "lms-StandardLogin_Username",
+         "id": 277503692671239815
       },
       {
          "label": "About",
@@ -58,7 +22,91 @@
          "name": "",
          "placeholder": null,
          "class": "",
-         "id": 115327969330690384
+         "id": 314288841485993248
+      },
+      {
+         "label": "Community",
+         "image_label_name": "Community.png",
+         "tag_name": "a",
+         "accessible_name": "Community",
+         "text": "Community",
+         "e_id": "",
+         "name": "",
+         "placeholder": null,
+         "class": "",
+         "id": 217884436078254150
+      },
+      {
+         "label": "Downloads",
+         "image_label_name": "Downloads.png",
+         "tag_name": "a",
+         "accessible_name": "Downloads",
+         "text": "Downloads",
+         "e_id": "",
+         "name": "",
+         "placeholder": null,
+         "class": "",
+         "id": 210325784738738870
+      },
+      {
+         "label": "Search",
+         "image_label_name": "Search.png",
+         "tag_name": "input",
+         "accessible_name": "Search This Site",
+         "text": "",
+         "e_id": "id-search-field",
+         "name": "q",
+         "placeholder": "Search",
+         "class": "search-field",
+         "id": 113366981391136876
+      },
+      {
+         "label": "Go",
+         "image_label_name": "Go.png",
+         "tag_name": "button",
+         "accessible_name": "GO",
+         "text": "GO",
+         "e_id": "submit",
+         "name": "submit",
+         "placeholder": null,
+         "class": "search-button",
+         "id": 283138489705225182
+      },
+      {
+         "label": "Sign In",
+         "image_label_name": "Sign In.png",
+         "tag_name": "a",
+         "accessible_name": "SIGN IN",
+         "text": "SIGN IN",
+         "e_id": "nav-signIn",
+         "name": "",
+         "placeholder": null,
+         "class": "",
+         "id": 105162061351915162
+      },
+      {
+         "label": "Email Address",
+         "image_label_name": "Email Address.png",
+         "tag_name": "input",
+         "accessible_name": "Email address",
+         "text": "",
+         "e_id": "input-xyos4yafn4m",
+         "name": "email",
+         "placeholder": "",
+         "class": "orm-Input-input input--UTZTv",
+         "id": 255947601629046824
+      },
+      {
+         "label": "Continue",
+         "image_label_name": "Continue.png",
+         "tag_name": "button",
+         "accessible_name": "Continue",
+         "text": "Continue",
+         "e_id": "",
+         "name": "",
+         "placeholder": null,
+         "class": "orm-Button-root",
+         "id": 324946434676636821
       },
       {
          "label": "Log In",
@@ -69,8 +117,8 @@
          "e_id": "",
          "name": null,
          "placeholder": null,
-         "class": "hm-MainHeaderRHSLoggedOutMed_Login ",
-         "id": 166651373304749832
+         "class": "hm-MainHeaderRHSLoggedOutMed_Login",
+         "id": 175168904940024203
       }
    ]
 }

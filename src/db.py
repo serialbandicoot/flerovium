@@ -1,6 +1,8 @@
 import os
 from pysondb import db
 
+from src.helper import Helper
+
 
 class DB:
     def __init__(self):
@@ -21,12 +23,12 @@ class DB:
             "label": label,
             "image_label_name": f"{label}.png",
             "tag_name": element.tag_name,
-            "accessible_name": element.accessible_name,
-            "text": element.text,
-            "e_id": element.get_attribute("id"),
-            "name": element.get_attribute("name"),
-            "placeholder": element.get_attribute("placeholder"),
-            "class": element.get_attribute("class"),
+            "accessible_name": Helper.strip(element.accessible_name),
+            "text": Helper.strip(element.text),
+            "e_id": Helper.strip(element.get_attribute("id")),
+            "name": Helper.strip(element.get_attribute("name")),
+            "placeholder": Helper.strip(element.get_attribute("placeholder")),
+            "class": Helper.strip(element.get_attribute("class")),
         }
         if self.get_by_label(label) is None:
             store.add(data)

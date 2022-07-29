@@ -41,7 +41,7 @@ class ImageText:
                 thr = cv2.threshold(
                     gry, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
                 )[1]
-            
+
                 img_text = pt.image_to_string(thr).strip()
 
                 if img_text.lower() == label.lower():
