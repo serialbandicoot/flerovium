@@ -42,9 +42,11 @@ class Flerovium(MethodMissing):
             if label_data["tag_name"] != None:
                 if label_data["name"] != "":
                     return HTML.find_element_by_name(self.driver, label_data["name"])
-                
+
                 if label_data["class"] != "":
-                    return HTML.find_element_by_class_name(self.driver, label_data["class"])
+                    return HTML.find_element_by_class_name(
+                        self.driver, label_data["class"]
+                    )
 
                 if label_data["e_id"] != None:
                     return HTML.find_element_by_id(self.driver, label_data["e_id"])
@@ -141,11 +143,6 @@ class Flerovium(MethodMissing):
                 self.element = tag_div
                 return self
 
-            tag_div = it.find_by_tag(Tag.FORM, label)
-            if tag_div:
-                self.element = tag_div
-                return self
-
         # No elements found!
         self.driver.save_screenshot("error.png")
 
@@ -162,3 +159,31 @@ class Flerovium(MethodMissing):
                 )
 
         return None
+
+    def cnn(self, label, site):
+        import random
+        import string
+
+        letters = string.ascii_lowercase
+        file = "".join(random.choice(letters) for i in range(10))
+        # file = f"{file}-{site}"
+        it = ImageText(self.driver)
+        tag_a = it.find_by_tag(Tag.A, label, file)
+        if tag_a:
+            # self.element = tag_a
+            return self
+
+        tag_input = it.find_by_tag(Tag.INPUT, label, file)
+        if tag_input:
+            # self.element = tag_input
+            return self
+
+        tag_button = it.find_by_tag(Tag.BUTTON, label, file)
+        if tag_button:
+            # self.element = tag_button
+            return self
+
+        tag_div = it.find_by_tag(Tag.DIV, label, file)
+        if tag_div:
+            # self.element = tag_div
+            return self

@@ -22,7 +22,7 @@ class TestFindByLabel(unittest.TestCase):
     def test_login(self):
         fl = Flerovium(self.driver)
         fl.find_by_label("Log In").click()
-        
+
         fl.find_by_label("Username")
         fl.send_keys("Sam")
         assert fl.element.get_attribute("value") == "Sam"
