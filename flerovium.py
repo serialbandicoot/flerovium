@@ -42,9 +42,11 @@ class Flerovium(MethodMissing):
             if label_data["tag_name"] != None:
                 if label_data["name"] != "":
                     return HTML.find_element_by_name(self.driver, label_data["name"])
-                
+
                 if label_data["class"] != "":
-                    return HTML.find_element_by_class_name(self.driver, label_data["class"])
+                    return HTML.find_element_by_class_name(
+                        self.driver, label_data["class"]
+                    )
 
                 if label_data["e_id"] != None:
                     return HTML.find_element_by_id(self.driver, label_data["e_id"])

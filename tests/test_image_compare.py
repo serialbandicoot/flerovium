@@ -8,7 +8,10 @@ import os
 class TestImageCompare(unittest.TestCase):
     def setUp(self):
         self.about_path = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)), "data", "images", "about.png",
+            os.path.dirname(os.path.realpath(__file__)),
+            "data",
+            "images",
+            "about.png",
         )
 
     def test_image_compare_bad(self):
