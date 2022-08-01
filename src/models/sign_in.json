@@ -1,0 +1,5 @@
+{
+    "Sign in": ["sign in", "log in"],
+    "Username": ["username", "email or phone number", "username or email address"],
+    "Password": ["password"]
+}
