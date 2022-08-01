@@ -1,8 +1,6 @@
 flerovium
 ==========
 
-|serialbandicoot| |flake8 Lint| |codecov| |CodeQL|
-
 Install
 -------
 
