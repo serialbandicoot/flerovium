@@ -61,7 +61,7 @@ const LabelUpdate = () => {
                     <div className='item-container'>
                    
                         <div className='card' key={label.id}>
-                        <img src={`http://localhost:5000/image?name=${label.image_label_name}`} alt='' />
+                        <img src={`http://localhost:5000/image?name=${label.image_name}`} alt='' />
             
                         <form onSubmit={handleSubmit}>
                             <label>

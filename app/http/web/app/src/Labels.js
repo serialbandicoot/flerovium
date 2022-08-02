@@ -32,7 +32,7 @@ const Labels = () => {
       <div className='item-container'>
         {labels.map((label) => (
           <div className='card' key={label.id}>
-            <img src={`http://localhost:5000/image?name=${label.image_label_name}`} alt='' />
+            <img src={`http://localhost:5000/image?name=${label.image_name}`} alt='' />
   
             <table>
               <thead>

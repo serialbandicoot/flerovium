@@ -1,4 +1,5 @@
 import os
+from src.client import Client
 
 
 class FileHelper:
@@ -9,6 +10,12 @@ class FileHelper:
         f.write(element.screenshot_as_png)
         f.close()
         return file
+
+    @staticmethod
+    def create_image_from_element(file: str, element):
+        f = open(file, "wb")
+        f.write(element.screenshot_as_png)
+        f.close()
 
     @staticmethod
     def save_image(before: str, after: str):

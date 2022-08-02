@@ -1,45 +1,35 @@
-from ast import expr
-from cProfile import label
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from PIL import Image as Img
 from src.file_helper import FileHelper
+from src.helper import random_string
 from src.html import HTML, Tag
-from src.db import DB
+from src.client import Client
 import os
 import pytesseract as pt
 import cv2
+import tempfile
 
 
 class ImageText:
 
-    tmp_image = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)), "..", "data", "images", "image.png"
-    )
-
     def __init__(self, driver: webdriver):
         self.driver = driver
 
-    def find_by_tag(self, tag: Tag, label: str, file = None, db_save=True):
+    def find_by_tag(self, tag: Tag, label: str, file=None, db_save=True):
         es = HTML.get(self.driver, tag)
         element = None
         img_file_name = label
         if file is None:
-            img_file_name = label
+            img_file_name = label.replace(" ", "_")
         else:
             img_file_name = file
 
         for e in es:
-            img_file = os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
-                "..",
-                "data",
-                "images",
-                f"{img_file_name}.png",
-            )
             try:
-                tmp = FileHelper.create_image_temp(self.tmp_image, e)
-                img = cv2.imread(tmp)
+                tmp_image = os.path.join(tempfile.gettempdir(), random_string())
+                FileHelper.create_image_from_element(tmp_image, e)
+                img = cv2.imread(tmp_image)
 
                 (h, w) = img.shape[:2]
                 img = cv2.resize(img, (w * 3, h * 3))
@@ -52,10 +42,16 @@ class ImageText:
 
                 if img_text.lower() == label.lower():
                     element = e
-                    FileHelper.save_image(self.tmp_image, img_file)
+                    
+                    Client().upload_image(tmp_image, img_file_name)
                     if db_save:
-                        DB().save_data(label, e)
+                        Client().save_data(label, e)
+
+                    FileHelper.remove_image(tmp_image) # Cleanup
                     break
+
+                FileHelper.remove_image(tmp_image) # Cleanup
+
             except WebDriverException as exe:
                 exe
                 pass

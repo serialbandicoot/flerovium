@@ -1,13 +1,16 @@
 from src.file_helper import FileHelper
 from src.html import Tag
 from src.image_text import ImageText
-from src.db import DB
+from src.client import Client
 from src.html import HTML
 from src.image_compare import ImageCompare, MatchType
 import os
 from selenium import webdriver
 from src.html import HTML
 from functools import partial
+from src.helper import random_string
+import shutil
+import tempfile
 
 
 class MethodMissing:
@@ -27,9 +30,7 @@ class Flerovium(MethodMissing):
         self.driver = driver
         HTML.release_driver_on_loaded(driver)
 
-    def _evaluate_by_selenium(self, label: str):
-        # 1. Check JSON Data
-        label_data = DB().get_by_label(label)
+    def _evaluate_by_selenium(self, label_data: str):
         if label_data is None:
             return None
 
@@ -75,37 +76,50 @@ class Flerovium(MethodMissing):
 
         return None
 
-    def _evaluate_by_image(self, label, element: str):
-        label_data = DB().get_by_label(label)
+    def _get_random_file(self):
+        return os.path.join(tempfile.gettempdir(), f"{random_string()}.png")
+
+    def _get_server_image(self, image_name):
+        server_img = self._get_random_file()
+        response = Client().get_raw_image(image_name)
+        with open(server_img, "wb") as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        return server_img
+
+    def _create_local_image_file(self, element):
+        local_img = self._get_random_file()
+        FileHelper.create_image_from_element(local_img, element)
+        return local_img
+
+    def _image_compare(self, server_img, local_img):
+        ic = ImageCompare(server_img, local_img)
+        res = ic.match()
+        FileHelper.remove_image(server_img)  # CleanUp
+        FileHelper.remove_image(local_img)  # CleanUp
+        if res == MatchType.BAD:
+            return None
+        else:
+            return res
+
+    def _evaluate_by_image(self, label_data, element: str):
         if element and label_data:
+            # todo: better check on element data
             if label_data["tag_name"] != None:
-                image_path = os.path.join(
-                    os.path.dirname(os.path.realpath(__file__)),
-                    "data",
-                    "images",
-                    label_data["image_label_name"],
-                )
-                tmp_path = os.path.join(
-                    os.path.dirname(os.path.realpath(__file__)),
-                    "data",
-                    "images",
-                    str(label_data["id"]),
-                )
-                if os.path.exists(image_path):
-                    tmp_file = FileHelper.create_image_temp(tmp_path, element)
-                    ic = ImageCompare(image_path, tmp_file)
-                    res = ic.match()
-                    FileHelper.remove_image(tmp_path)  # CleanUp
-                    if res == MatchType.BAD:
-                        return None
-                    else:
-                        return res
+                server_img = self._get_server_image(label_data["image_name"])
+                local_img = self._create_local_image_file(element)
+
+                return self._image_compare(server_img, local_img)
+
         else:
             return None
 
     def _high_ranking_function(self, label: str):
-        e = self._evaluate_by_selenium(label)
-        i = self._evaluate_by_image(label, e)
+        label_data = Client().get_by_label(label)
+        e = self._evaluate_by_selenium(label_data)
+        if e is None:
+            i = None
+        else:
+            i = self._evaluate_by_image(label_data, e)
 
         if e != None and i != None:
             # High Ranking
@@ -166,12 +180,7 @@ class Flerovium(MethodMissing):
         return None
 
     def _cnn(self, label, site):
-        import random
-        import string
-
-        letters = string.ascii_lowercase
-        rnd = "".join(random.choice(letters) for i in range(10))
-        file = f"{label}-{site}-{rnd}"
+        file = f"{label}-{site}-{random_string()}"
 
         it = ImageText(self.driver)
         # limit by tag for now
