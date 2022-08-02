@@ -179,11 +179,12 @@ class Flerovium(MethodMissing):
 
         return None
 
-    def _cnn(self, label, site):
+    def _cnn(self, label: str, site: str, save_path: str):
         file = f"{label}-{site}-{random_string()}"
+        full_path = os.path.join(save_path, f"{file}.png")
 
         it = ImageText(self.driver)
         # limit by tag for now
-        tag_a = it.find_by_tag(Tag.A, label, file, db_save=False)
+        tag_a = it.find_by_tag(Tag.A, label, full_path, db_save=False)
         if tag_a:
             return self

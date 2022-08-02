@@ -4,12 +4,9 @@ from src.client import Client
 
 class FileHelper:
     @staticmethod
-    def create_image_temp(file: str, element) -> str:
-        FileHelper.remove_image(file)
-        f = open(file, "wb")
-        f.write(element.screenshot_as_png)
-        f.close()
-        return file
+    def move_file(before: str, after: str) -> str:
+        if os.path.exists(before):
+            os.rename(before, after)
 
     @staticmethod
     def create_image_from_element(file: str, element):

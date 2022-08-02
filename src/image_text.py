@@ -12,18 +12,18 @@ import tempfile
 
 
 class ImageText:
-
     def __init__(self, driver: webdriver):
         self.driver = driver
 
-    def find_by_tag(self, tag: Tag, label: str, file=None, db_save=True):
+    def find_by_tag(self, tag: Tag, label: str, save_file=False, db_save=True):
         es = HTML.get(self.driver, tag)
         element = None
         img_file_name = label
-        if file is None:
+        
+        if save_file is False:
             img_file_name = label.replace(" ", "_")
         else:
-            img_file_name = file
+            img_file_name = save_file
 
         for e in es:
             try:
@@ -42,15 +42,19 @@ class ImageText:
 
                 if img_text.lower() == label.lower():
                     element = e
-                    
-                    Client().upload_image(tmp_image, img_file_name)
+
+                    if save_file is False:
+                        Client().upload_image(tmp_image, img_file_name)
+                    else:
+                        FileHelper.move_file(tmp_image, save_file)
+
                     if db_save:
                         Client().save_data(label, e)
 
-                    FileHelper.remove_image(tmp_image) # Cleanup
+                    FileHelper.remove_image(tmp_image)  # Cleanup
                     break
 
-                FileHelper.remove_image(tmp_image) # Cleanup
+                FileHelper.remove_image(tmp_image)  # Cleanup
 
             except WebDriverException as exe:
                 exe
