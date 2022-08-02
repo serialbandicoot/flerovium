@@ -164,3 +164,17 @@ class Flerovium(MethodMissing):
                 )
 
         return None
+
+    def _cnn(self, label, site):
+        import random
+        import string
+
+        letters = string.ascii_lowercase
+        rnd = "".join(random.choice(letters) for i in range(10))
+        file = f"{label}-{site}-{rnd}"
+
+        it = ImageText(self.driver)
+        # limit by tag for now
+        tag_a = it.find_by_tag(Tag.A, label, file, db_save=False)
+        if tag_a:
+            return self

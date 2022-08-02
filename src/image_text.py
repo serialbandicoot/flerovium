@@ -20,16 +20,22 @@ class ImageText:
     def __init__(self, driver: webdriver):
         self.driver = driver
 
-    def find_by_tag(self, tag: Tag, label: str):
+    def find_by_tag(self, tag: Tag, label: str, file = None, db_save=True):
         es = HTML.get(self.driver, tag)
         element = None
+        img_file_name = label
+        if file is None:
+            img_file_name = label
+        else:
+            img_file_name = file
+
         for e in es:
             img_file = os.path.join(
                 os.path.dirname(os.path.realpath(__file__)),
                 "..",
                 "data",
                 "images",
-                f"{label}.png",
+                f"{img_file_name}.png",
             )
             try:
                 tmp = FileHelper.create_image_temp(self.tmp_image, e)
@@ -47,7 +53,8 @@ class ImageText:
                 if img_text.lower() == label.lower():
                     element = e
                     FileHelper.save_image(self.tmp_image, img_file)
-                    DB().save_data(label, e)
+                    if db_save:
+                        DB().save_data(label, e)
                     break
             except WebDriverException as exe:
                 exe
