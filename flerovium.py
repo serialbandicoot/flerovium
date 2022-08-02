@@ -1,16 +1,17 @@
-from src.file_helper import FileHelper
-from src.html import Tag
-from src.image_text import ImageText
-from src.client import Client
-from src.html import HTML
-from src.image_compare import ImageCompare, MatchType
 import os
-from selenium import webdriver
-from src.html import HTML
-from functools import partial
-from src.helper import random_string
 import shutil
 import tempfile
+from functools import partial
+
+from selenium import webdriver
+
+from src.client import Client
+from src.file_helper import FileHelper
+from src.helper import random_string
+from src.html import HTML
+from src.html import Tag
+from src.image_compare import ImageCompare, MatchType
+from src.image_text import ImageText
 
 
 class MethodMissing:

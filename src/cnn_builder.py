@@ -1,14 +1,15 @@
-from ast import arg
-import os
-import csv
-import threading
-import queue
-import time
 import argparse
-from flerovium import Flerovium
+import csv
+import os
+import queue
+import threading
+import time
+from pathlib import Path
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from pathlib import Path
+
+from flerovium import Flerovium
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--label", default="label")
@@ -61,19 +62,20 @@ def cli():
     def worker():
         while True:
             item = q.get()
-            print(f"Extract {item}")
-            _extracted_list(extract, item["url"])
+            domain = item["Domain"]
+            print(f"Extract {domain}")
+            _extracted_list(extract, item["Domain"])
             time.sleep(1)
 
-            # find_by_label item['url']
+            # find_by_label item['Domain']
             options = Options()
             options.headless = True
             driver = webdriver.Chrome(options=options)
-            url = f"https://www.{item['url']}"
+            url = f"https://www.{item['Domain']}"
             driver.get(url)
 
             fl = Flerovium(driver=driver)
-            fl._cnn(label, item["url"], save_path)
+            fl._cnn(label, item["Domain"], save_path)
             driver.close()
 
             q.task_done()
@@ -86,7 +88,7 @@ def cli():
         t.start()
 
     for item in _get_file(file):
-        if _check(extract, item["url"]) is False:
+        if _check(extract, item["Domain"]) is False:
             q.put(item)
 
     q.join()

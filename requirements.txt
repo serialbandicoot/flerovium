@@ -6,3 +6,4 @@ pysondb
 pixelmatch
 flask
 flask-cors
+requests

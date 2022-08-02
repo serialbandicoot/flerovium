@@ -1,14 +1,15 @@
+import os
+import tempfile
+
+import cv2
+import pytesseract as pt
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
-from PIL import Image as Img
+
+from src.client import Client
 from src.file_helper import FileHelper
 from src.helper import random_string
 from src.html import HTML, Tag
-from src.client import Client
-import os
-import pytesseract as pt
-import cv2
-import tempfile
 
 
 class ImageText:
@@ -18,8 +19,7 @@ class ImageText:
     def find_by_tag(self, tag: Tag, label: str, save_file=False, db_save=True):
         es = HTML.get(self.driver, tag)
         element = None
-        img_file_name = label
-        
+
         if save_file is False:
             img_file_name = label.replace(" ", "_")
         else:
@@ -46,6 +46,7 @@ class ImageText:
                     if save_file is False:
                         Client().upload_image(tmp_image, img_file_name)
                     else:
+                        print(save_file)
                         FileHelper.move_file(tmp_image, save_file)
 
                     if db_save:
