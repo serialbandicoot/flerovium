@@ -9,7 +9,7 @@ from selenium.common.exceptions import WebDriverException
 from src.client import Client
 from src.file_helper import FileHelper
 from src.helper import random_string
-from src.html import HTML, Tag
+from src.html_selenium import HTMLSelenium, Tag
 
 
 class ImageText:
@@ -17,7 +17,7 @@ class ImageText:
         self.driver = driver
 
     def find_by_tag(self, tag: Tag, label: str, save_file=False, db_save=True):
-        es = HTML.get(self.driver, tag)
+        es = HTMLSelenium.get(self.driver, tag)
         element = None
 
         if save_file is False:

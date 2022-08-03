@@ -17,40 +17,40 @@ class Tag(Enum):
     FORM = "form"
 
 
-class HTML:
+class HTMLSelenium:
     @staticmethod
     def get(driver: webdriver, tag: Tag):
-        HTML.release_driver_on_loaded(driver)
+        HTMLSelenium.release_driver_on_loaded(driver)
         return driver.find_elements(By.TAG_NAME, tag.value)
 
     @staticmethod
     def find_element_by_link(driver: webdriver, value: str):
-        HTML.release_driver_on_loaded(driver)
-        HTML._wait(driver).until(EC.presence_of_element_located((By.LINK_TEXT, value)))
+        HTMLSelenium.release_driver_on_loaded(driver)
+        HTMLSelenium._wait(driver).until(EC.presence_of_element_located((By.LINK_TEXT, value)))
         return driver.find_element(By.LINK_TEXT, value)
 
     @staticmethod
     def find_element_by_name(driver: webdriver, value: str):
-        HTML.release_driver_on_loaded(driver)
-        HTML._wait(driver).until(EC.presence_of_element_located((By.NAME, value)))
+        HTMLSelenium.release_driver_on_loaded(driver)
+        HTMLSelenium._wait(driver).until(EC.presence_of_element_located((By.NAME, value)))
         return driver.find_element(By.NAME, value)
 
     @staticmethod
     def find_element_by_id(driver: webdriver, value: str):
-        HTML.release_driver_on_loaded(driver)
-        HTML._wait(driver).until(EC.presence_of_element_located((By.ID, value)))
+        HTMLSelenium.release_driver_on_loaded(driver)
+        HTMLSelenium._wait(driver).until(EC.presence_of_element_located((By.ID, value)))
         return driver.find_element(By.ID, value)
 
     @staticmethod
     def find_element_by_class_name(driver: webdriver, value: str):
-        HTML.release_driver_on_loaded(driver)
-        HTML._wait(driver).until(EC.presence_of_element_located((By.CLASS_NAME, value)))
-        HTML.scroll_into_view(driver, driver.find_element(By.CLASS_NAME, value))
+        HTMLSelenium.release_driver_on_loaded(driver)
+        HTMLSelenium._wait(driver).until(EC.presence_of_element_located((By.CLASS_NAME, value)))
+        HTMLSelenium.scroll_into_view(driver, driver.find_element(By.CLASS_NAME, value))
         return driver.find_element(By.CLASS_NAME, value)
 
     @staticmethod
     def release_driver_on_loaded(driver: webdriver):
-        wait = HTML._wait(driver)
+        wait = HTMLSelenium._wait(driver)
         jquery, document_ready = False, False
         try:
             wait.until(

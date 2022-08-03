@@ -8,8 +8,8 @@ from selenium import webdriver
 from src.client import Client
 from src.file_helper import FileHelper
 from src.helper import random_string
-from src.html import HTML
-from src.html import Tag
+from src.html_selenium import HTMLSelenium
+from src.html_selenium import Tag
 from src.image_compare import ImageCompare, MatchType
 from src.image_text import ImageText
 
@@ -29,7 +29,7 @@ class Flerovium(MethodMissing):
 
     def __init__(self, driver: webdriver):
         self.driver = driver
-        HTML.release_driver_on_loaded(driver)
+        HTMLSelenium.release_driver_on_loaded(driver)
 
     def _evaluate_by_selenium(self, label_data: str):
         if label_data is None:
@@ -37,41 +37,41 @@ class Flerovium(MethodMissing):
 
         # Links
         if label_data["tag_name"] == "a" and label_data["text"] != None:
-            return HTML.find_element_by_link(self.driver, label_data["text"])
+            return HTMLSelenium.find_element_by_link(self.driver, label_data["text"])
 
         # Input
         if label_data["tag_name"] == "input":
             if label_data["tag_name"] != None:
                 if label_data["name"] != "":
-                    return HTML.find_element_by_name(self.driver, label_data["name"])
+                    return HTMLSelenium.find_element_by_name(self.driver, label_data["name"])
 
                 if label_data["class"] != "":
-                    return HTML.find_element_by_class_name(
+                    return HTMLSelenium.find_element_by_class_name(
                         self.driver, label_data["class"]
                     )
 
                 if label_data["e_id"] != None:
-                    return HTML.find_element_by_id(self.driver, label_data["e_id"])
+                    return HTMLSelenium.find_element_by_id(self.driver, label_data["e_id"])
 
         # Button
         if label_data["tag_name"] == "button":
             if label_data["name"] != "":
-                e = HTML.find_element_by_name(self.driver, label_data["name"])
+                e = HTMLSelenium.find_element_by_name(self.driver, label_data["name"])
                 if e.text == label_data["text"]:
                     return e
 
             if label_data["e_id"] != "":
-                e = HTML.find_element_by_id(self.driver, label_data["e_id"])
+                e = HTMLSelenium.find_element_by_id(self.driver, label_data["e_id"])
                 if e.text == label_data["text"]:
                     return e
 
             if label_data["class"] != "":
-                e = HTML.find_element_by_class_name(self.driver, label_data["class"])
+                e = HTMLSelenium.find_element_by_class_name(self.driver, label_data["class"])
                 if e.text == label_data["text"]:
                     return e
 
         if label_data["class"] != None:
-            e = HTML.find_element_by_class_name(self.driver, label_data["class"])
+            e = HTMLSelenium.find_element_by_class_name(self.driver, label_data["class"])
             if e.text == label_data["text"]:
                 return e
 
