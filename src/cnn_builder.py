@@ -75,10 +75,11 @@ def cli():
             options.add_argument(
                 "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15"
             )
-            url = f"https://www.{item['Domain']}"
+            url = f"http://www.{item['Domain']}"
+            print(url)
             
             request = requests.get(url)
-            if request.status_code[0] == 2:
+            if request.status_code == 200:
                 driver.get(url)
                 fl = Flerovium(driver=driver)
                 fl._cnn(label, item["Domain"], save_path)
