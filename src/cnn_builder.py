@@ -77,15 +77,17 @@ def cli():
             )
             url = f"http://www.{item['Domain']}"
             print(url)
-            
-            request = requests.get(url)
-            if request.status_code == 200:
-                driver.get(url)
-                fl = Flerovium(driver=driver)
-                fl._cnn(label, item["Domain"], save_path)
-                driver.close()
+            if url.count(".") == 2:
+                request = requests.get(url)
+                if request.status_code == 200:
+                    driver.get(url)
+                    fl = Flerovium(driver=driver)
+                    fl._cnn(label, item["Domain"], save_path)
+                    driver.close()
+                else:
+                    print(f"Invalid url {url}")
             else:
-                print(f"Invalid url {url}")
+                print(f"Invalid . in url {url}")
 
             q.task_done()
 
