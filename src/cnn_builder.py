@@ -4,6 +4,7 @@ import os
 import queue
 import threading
 import time
+import requests
 from pathlib import Path
 
 from selenium import webdriver
@@ -75,11 +76,15 @@ def cli():
                 "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15"
             )
             url = f"https://www.{item['Domain']}"
-            driver.get(url)
-
-            fl = Flerovium(driver=driver)
-            fl._cnn(label, item["Domain"], save_path)
-            driver.close()
+            
+            request = requests.get(url)
+            if request.status_code[0] == 2:
+                driver.get(url)
+                fl = Flerovium(driver=driver)
+                fl._cnn(label, item["Domain"], save_path)
+                driver.close()
+            else:
+                print(f"Invalid url {url}")
 
             q.task_done()
 
