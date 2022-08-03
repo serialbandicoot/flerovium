@@ -71,19 +71,26 @@ def cli():
             # find_by_label item['Domain']
             options = Options()
             options.headless = True
-            driver = webdriver.Chrome(options=options)
             options.add_argument(
                 "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15"
             )
+            driver = webdriver.Chrome(options=options)
+            driver.set_window_rect(width=1024, height=700)
+
             url = f"http://www.{item['Domain']}"
             print(url)
             if url.count(".") == 2:
                 request = requests.get(url)
                 if request.status_code == 200:
-                    driver.get(url)
-                    fl = Flerovium(driver=driver)
-                    fl._cnn(label, item["Domain"], save_path)
-                    driver.close()
+
+                    try:
+                        driver.get(url)
+                        fl = Flerovium(driver=driver)
+                        fl.cnn(label, item["Domain"], save_path)
+                        driver.close()
+                    except Exception as e:
+                        if driver:
+                            driver.close()
                 else:
                     print(f"Invalid url {url}")
             else:

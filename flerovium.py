@@ -180,7 +180,7 @@ class Flerovium(MethodMissing):
 
         return None
 
-    def _cnn(self, label: str, site: str, save_path: str):
+    def cnn(self, label: str, site: str, save_path: str):
         file = f"{label}-{site}-{random_string()}"
         full_path = os.path.join(save_path, f"{file}.png")
 
