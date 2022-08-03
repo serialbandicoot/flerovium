@@ -14,6 +14,7 @@ class Tag(Enum):
     INPUT = "input"
     BUTTON = "button"
     DIV = "div"
+    FORM = "form"
 
 
 class HTML:
