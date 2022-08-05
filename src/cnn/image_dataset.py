@@ -3,7 +3,14 @@ import pandas as pd
 from torch import tensor
 from torchvision.io import read_image
 from torch.utils.data import Dataset, Subset
-from torchvision.transforms import ToTensor, ToPILImage, Lambda, Compose, Resize, Grayscale
+from torchvision.transforms import (
+    ToTensor,
+    ToPILImage,
+    Lambda,
+    Compose,
+    Resize,
+    Grayscale,
+)
 from sklearn.model_selection import train_test_split
 from torch import nn
 import torch
@@ -22,6 +29,7 @@ import matplotlib.pyplot as plt
 #   5: about,
 # }
 #
+
 
 class CustomDatasetFromCSV(Dataset):
     def __init__(self, csv_path, img_dir, height, width, transforms=None):
@@ -44,9 +52,9 @@ class CustomDatasetFromCSV(Dataset):
         # image = read_image(img_path)
 
         single_image_label = self.labels[index]
-        # # Read each 784 pixels and reshape the 1D array ([784]) to 2D array ([28,28]) 
+        # # Read each 784 pixels and reshape the 1D array ([784]) to 2D array ([28,28])
         # img_as_np= np.array(Image.open(img_path)).reshape(1,28,28).astype('uint8')
-	    # # Convert image from numpy array to PIL image, mode 'L' is for grayscale
+        # # Convert image from numpy array to PIL image, mode 'L' is for grayscale
         # img_as_img = Image.fromarray(img_as_np)
         # img_as_img = img_as_img.convert('L')
         # Transform image to tensor
@@ -57,9 +65,6 @@ class CustomDatasetFromCSV(Dataset):
 
     def __len__(self):
         return len(self.data.index)
-        
-
-
 
 
 class ImageDataset(Dataset):
@@ -79,16 +84,6 @@ class ImageDataset(Dataset):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
-
-        # Read each 784 pixels and reshape the 1D array ([784]) to 2D array ([28,28]) 
-        # img_as_np = np.asarray(self.data.iloc[index][1:]).reshape(28,28).astype('uint8')
-	    # # Convert image from numpy array to PIL image, mode 'L' is for grayscale
-        # img_as_img = Image.fromarray(img_as_np)
-        # img_as_img = img_as_img.convert('L')
-
-        # img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
-        # image = read_image(img_path)
-
         label = self.img_labels.iloc[idx, 1]
         if self.transform:
             image = self.transform(image)
@@ -99,23 +94,17 @@ class ImageDataset(Dataset):
 
 def create_dataset():
     # return ImageDataset(
-    #     annotations_file="/Users/sam.treweek/Projects/flerovium/src/cnn/data/labels.csv",
-    #     img_dir="/Users/sam.treweek/Projects/flerovium/src/cnn/data/img_dir",
+    #     annotations_file="/flerovium/src/cnn/data/labels.csv",
+    #     img_dir="/flerovium/src/cnn/data/img_dir",
     # )
-    # transformations = Compose([Resize(48)])
-    transform = Compose([
-            Resize((48,96)),
-            Grayscale(),
-            ToTensor()
-        ]
-    )
+    transform = Compose([Resize((48, 96)), Grayscale(), ToTensor()])
     return CustomDatasetFromCSV(
-        '/Users/sam.treweek/Projects/flerovium/src/cnn/data/labels.csv', 
-                    '/Users/sam.treweek/Projects/flerovium/src/cnn/data/img_dir', 
-                    28, 
-                    28, 
-                    transform)
-
+        "/Users/sam.treweek/Projects/flerovium/src/cnn/data/labels.csv",
+        "/Users/sam.treweek/Projects/flerovium/src/cnn/data/img_dir",
+        28,
+        28,
+        transform,
+    )
 
 
 def train_test_dataset(dataset, test_split=0.25):
@@ -143,6 +132,7 @@ def prepare_dataset():
     test_dataloader = DataLoader(test, batch_size=64, shuffle=True)
 
     return train_dataloader, test_dataloader
+
 
 # class NeuralNetwork(nn.Module):
 #     def __init__(self):
@@ -176,9 +166,9 @@ def prepare_dataset():
 # model = models.vgg16(pretrained=True)
 # torch.save(model.state_dict(), "model_weights.pth")
 
+
 def iterate_dataset():
     train_dataloader, test_dataloader = prepare_dataset()
-
 
     train_features, train_labels = next(iter(train_dataloader))
     print(f"Feature batch shape: {train_features.size()}")
@@ -188,5 +178,6 @@ def iterate_dataset():
     plt.imshow(img, cmap="gray")
     plt.show()
     print(f"Label: {label}")
+
 
 # iterate_dataset()
