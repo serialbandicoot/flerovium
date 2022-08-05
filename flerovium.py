@@ -43,7 +43,9 @@ class Flerovium(MethodMissing):
         if label_data["tag_name"] == "input":
             if label_data["tag_name"] != None:
                 if label_data["name"] != "":
-                    return HTMLSelenium.find_element_by_name(self.driver, label_data["name"])
+                    return HTMLSelenium.find_element_by_name(
+                        self.driver, label_data["name"]
+                    )
 
                 if label_data["class"] != "":
                     return HTMLSelenium.find_element_by_class_name(
@@ -51,7 +53,9 @@ class Flerovium(MethodMissing):
                     )
 
                 if label_data["e_id"] != None:
-                    return HTMLSelenium.find_element_by_id(self.driver, label_data["e_id"])
+                    return HTMLSelenium.find_element_by_id(
+                        self.driver, label_data["e_id"]
+                    )
 
         # Button
         if label_data["tag_name"] == "button":
@@ -66,12 +70,16 @@ class Flerovium(MethodMissing):
                     return e
 
             if label_data["class"] != "":
-                e = HTMLSelenium.find_element_by_class_name(self.driver, label_data["class"])
+                e = HTMLSelenium.find_element_by_class_name(
+                    self.driver, label_data["class"]
+                )
                 if e.text == label_data["text"]:
                     return e
 
         if label_data["class"] != None:
-            e = HTMLSelenium.find_element_by_class_name(self.driver, label_data["class"])
+            e = HTMLSelenium.find_element_by_class_name(
+                self.driver, label_data["class"]
+            )
             if e.text == label_data["text"]:
                 return e
 

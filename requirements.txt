@@ -7,3 +7,9 @@ pixelmatch
 flask
 flask-cors
 requests
+torch
+torchvision
+numpy
+matplotlib
+pandas
+scikit-learn

@@ -26,13 +26,17 @@ class HTMLSelenium:
     @staticmethod
     def find_element_by_link(driver: webdriver, value: str):
         HTMLSelenium.release_driver_on_loaded(driver)
-        HTMLSelenium._wait(driver).until(EC.presence_of_element_located((By.LINK_TEXT, value)))
+        HTMLSelenium._wait(driver).until(
+            EC.presence_of_element_located((By.LINK_TEXT, value))
+        )
         return driver.find_element(By.LINK_TEXT, value)
 
     @staticmethod
     def find_element_by_name(driver: webdriver, value: str):
         HTMLSelenium.release_driver_on_loaded(driver)
-        HTMLSelenium._wait(driver).until(EC.presence_of_element_located((By.NAME, value)))
+        HTMLSelenium._wait(driver).until(
+            EC.presence_of_element_located((By.NAME, value))
+        )
         return driver.find_element(By.NAME, value)
 
     @staticmethod
@@ -44,7 +48,9 @@ class HTMLSelenium:
     @staticmethod
     def find_element_by_class_name(driver: webdriver, value: str):
         HTMLSelenium.release_driver_on_loaded(driver)
-        HTMLSelenium._wait(driver).until(EC.presence_of_element_located((By.CLASS_NAME, value)))
+        HTMLSelenium._wait(driver).until(
+            EC.presence_of_element_located((By.CLASS_NAME, value))
+        )
         HTMLSelenium.scroll_into_view(driver, driver.find_element(By.CLASS_NAME, value))
         return driver.find_element(By.CLASS_NAME, value)
 
