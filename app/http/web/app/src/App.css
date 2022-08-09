@@ -10,10 +10,30 @@ h1 {
 .card {
   text-align: center;
   padding: 10px;
-  width: 300px;
+  width: 350px;
   border-radius: 5px;
   padding: 1em;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.label-card {
+  text-align: center;
+  padding: 10px;
+  width: 600px;
+  border-radius: 5px;
+  padding: 1em;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.table-card {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  width: 600px;
+  border-radius: 5px;
+  padding: 1em;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.label {
+  justify-content: center;
 }
 img {
   max-height: 300px;

@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.options import Options
 
 import unittest
 
+from src.tag import Tag
+
 
 class TestFindByLabel(unittest.TestCase):
     def setUp(self):
@@ -13,14 +15,14 @@ class TestFindByLabel(unittest.TestCase):
 
         self.driver = webdriver.Chrome(options=options)
         self.driver.set_window_rect(width=1024, height=700)
-        self.driver.get("https://www.webs.com")
+        self.driver.get("https://www.ted.com")
 
     def tearDown(self):
         self.driver.close()
 
     def test_sign_in(self):
-
         fl = Flerovium(self.driver)
         fl.find_by_label("Sign In").click()
-        # fl.find_by_label("Email Address").send_keys("sam.treweek@bjss.com")
-        # fl.find_by_label("Continue").click()
+        fl.find_by_label("Email Address", Tag.INPUT).send_keys("hello")
+        text = fl.find_by_label("Email Address").text()
+        assert text == "hello"

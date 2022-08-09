@@ -1,20 +1,12 @@
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from enum import Enum
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import JavascriptException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-
-class Tag(Enum):
-
-    A = "a"
-    INPUT = "input"
-    BUTTON = "button"
-    DIV = "div"
-    FORM = "form"
+from src.tag import Tag
 
 
 class HTMLSelenium:

@@ -2,6 +2,7 @@ import os
 import shutil
 import tempfile
 from functools import partial
+from typing import Union
 
 from selenium import webdriver
 
@@ -12,6 +13,7 @@ from src.html_selenium import HTMLSelenium
 from src.html_selenium import Tag
 from src.image_compare import ImageCompare, MatchType
 from src.image_text import ImageText
+from src.tag import Tag
 
 
 class MethodMissing:
@@ -139,12 +141,12 @@ class Flerovium(MethodMissing):
         else:
             return None
 
-    def find_by_label(self, label: str):
+    def find_by_label(self, label: str, tag: Union[None, Tag] = None):
         hrf_element = self._high_ranking_function(label)
         if hrf_element:
             self.element = hrf_element
             return self
-        else:
+        elif tag is None:
             it = ImageText(self.driver)
             tag_a = it.find_by_tag(Tag.A, label)
             if tag_a:
@@ -170,6 +172,12 @@ class Flerovium(MethodMissing):
             if tag_div:
                 self.element = tag_div
                 return self
+        elif tag is not None:
+            it = ImageText(self.driver)
+            tag_e = it.find_by_tag(tag, label)
+            if tag_e:
+                self.element = tag_e
+                return self
 
         # No elements found!
         self.driver.save_screenshot("error.png")
@@ -193,7 +201,18 @@ class Flerovium(MethodMissing):
         full_path = os.path.join(save_path, f"{file}.png")
 
         it = ImageText(self.driver)
-        # limit by tag for now
+        # limit by tag "A" for now
         tag_a = it.find_by_tag(Tag.A, label, full_path, db_save=False)
         if tag_a:
             return self
+
+    def text(self):
+        try:
+            text = self.element.text
+            if text == '':
+                return self.element.get_attribute("value")
+            return text
+        except Exception as e:
+            pass
+
+        return ''

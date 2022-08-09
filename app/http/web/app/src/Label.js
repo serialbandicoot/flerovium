@@ -45,20 +45,22 @@ const Label = () => {
         <React.Fragment>
             {loading && <></>}
             {!loading && (
-                <div> 
+                <div className='label'> 
                     <h1>Label {label.label}</h1>
                     <div className='item-container'>
                    
-                        <div className='card' key={label.id}>
+                        <div className='label-card' key={label.id}>
                         <img src={`http://localhost:5000/image?name=${label.image_name}`} alt='' />
             
-                        <table>
+                        <table className='table-card'>
                         <thead>
                             <tr>
                             <td>Text</td>
                             <td>Id</td>
                             <td>Tag Name</td>
                             <td>Accessible</td>
+                            <td>Name</td>
+                            <td>Class</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,6 +69,8 @@ const Label = () => {
                             <td>{label.e_id}</td>
                             <td>{label.tag_name}</td>
                             <td>{label.accessible_name}</td>
+                            <td>{label.name}</td>
+                            <td>{label.class}</td>
                             </tr>
                         </tbody>
                         

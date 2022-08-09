@@ -1,7 +1,7 @@
 from flerovium import Flerovium
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
+from src.tag import Tag
 import unittest
 
 
