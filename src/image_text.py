@@ -46,7 +46,7 @@ class ImageText:
             except WebDriverException as exe:
                 exe
                 pass
-        
+
         if element is None and tag is Tag.INPUT:
             for e in es:
                 try:
@@ -57,7 +57,9 @@ class ImageText:
                     if img_text.lower() == label.lower():
                         element = e
 
-                        self._persist_data(label, save_file, db_save, img_file_name, e, tmp_image)
+                        self._persist_data(
+                            label, save_file, db_save, img_file_name, e, tmp_image
+                        )
 
                         FileHelper.remove_image(tmp_image)  # Cleanup
                         break

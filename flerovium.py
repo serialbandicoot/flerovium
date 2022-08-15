@@ -209,10 +209,10 @@ class Flerovium(MethodMissing):
     def text(self):
         try:
             text = self.element.text
-            if text == '':
+            if text == "":
                 return self.element.get_attribute("value")
             return text
         except Exception as e:
             pass
 
-        return ''
+        return ""
