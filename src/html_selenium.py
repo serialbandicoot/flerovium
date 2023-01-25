@@ -2,7 +2,7 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import JavascriptException
+from selenium.common.exceptions import JavascriptException, TimeoutException, ElementNotInteractableException, InvalidSelectorException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -16,12 +16,18 @@ class HTMLSelenium:
         return driver.find_elements(By.TAG_NAME, tag.value)
 
     @staticmethod
-    def find_element_by_link(driver: webdriver, value: str):
+    def find_element_by_link(driver: webdriver, value: str, logging=False):
         HTMLSelenium.release_driver_on_loaded(driver)
-        HTMLSelenium._wait(driver).until(
-            EC.presence_of_element_located((By.LINK_TEXT, value))
-        )
-        return driver.find_element(By.LINK_TEXT, value)
+        try:
+            HTMLSelenium._wait(driver).until(
+                EC.presence_of_element_located((By.LINK_TEXT, value))
+            )
+            HTMLSelenium.scroll_into_view(driver, driver.find_element(By.LINK_TEXT, value))
+            return driver.find_element(By.LINK_TEXT, value)
+        except (TimeoutException, ElementNotInteractableException):
+            print("Timeout Exception - Continue")
+
+        return None
 
     @staticmethod
     def find_element_by_name(driver: webdriver, value: str):
@@ -39,12 +45,23 @@ class HTMLSelenium:
 
     @staticmethod
     def find_element_by_class_name(driver: webdriver, value: str):
+        if len(value.split()) > 0:
+            value = "." + '.'.join(value.split())
+            by = By.CSS_SELECTOR
+        else:
+            by = By.CLASS_NAME
+
         HTMLSelenium.release_driver_on_loaded(driver)
-        HTMLSelenium._wait(driver).until(
-            EC.presence_of_element_located((By.CLASS_NAME, value))
-        )
-        HTMLSelenium.scroll_into_view(driver, driver.find_element(By.CLASS_NAME, value))
-        return driver.find_element(By.CLASS_NAME, value)
+        try:
+            HTMLSelenium._wait(driver).until(
+                EC.presence_of_element_located((by, value))
+            )
+            HTMLSelenium.scroll_into_view(driver, driver.find_element(by, value))
+            return driver.find_element(by, value)
+        except (InvalidSelectorException, TimeoutException):
+            print("Timeout Exception - Continue")
+
+        return None
 
     @staticmethod
     def release_driver_on_loaded(driver: webdriver):
@@ -75,7 +92,7 @@ class HTMLSelenium:
 
     @staticmethod
     def _wait(driver):
-        return WebDriverWait(driver, 30)
+        return WebDriverWait(driver, 15)
 
     @staticmethod
     def scroll_into_view(driver, element):

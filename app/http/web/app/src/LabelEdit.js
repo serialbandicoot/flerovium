@@ -6,10 +6,12 @@ import JSONbig from 'json-bigint'
 const LabelUpdate = () => {
     const [loading, setLoading] = useState(true);
     const [label, setLabel] = useState("");
+    const [labelValue, setLabelValue] = useState("");
     const [text, setText] = useState("");
     const [eId, setEId] = useState("");
     const [tagName, setTagName] = useState("");
     const [accessibleName, setAccessibleName] = useState("");
+    const [className, setClassName] = useState("");
     const {id} = useParams();
     let navigate = useNavigate();
 
@@ -25,10 +27,12 @@ const LabelUpdate = () => {
         .then((res) => {
           console.log(JSONbig.parse(res.data));
           setLabel(JSONbig.parse(res.data));
+          setLabelValue(JSONbig.parse(res.data).label)
           setText(JSONbig.parse(res.data).text);
           setEId(JSONbig.parse(res.data).e_id);
           setTagName(JSONbig.parse(res.data).tag_name);
           setAccessibleName(JSONbig.parse(res.data).accessible_name);
+          setClassName(JSONbig.parse(res.data).class);
           setLoading(false);
         })
         .catch((err) => {
@@ -40,10 +44,12 @@ const LabelUpdate = () => {
         evt.preventDefault();
         let url = `http://localhost:5000/label/${id}`
         axios.put(url, {
+            "label": labelValue,
             "text": text,
             "e_id": eId,
             "tag_name": tagName,
             "accessible_name": accessibleName,
+            "class": className,
         })
         .then((res)=> {
             console.log(res.data)
@@ -65,6 +71,16 @@ const LabelUpdate = () => {
             
                         <form onSubmit={handleSubmit}>
                             <label>
+                                Label:
+                                <input
+                                type="text"
+                                value={labelValue}
+                                onChange={e => setLabelValue(e.target.value)}
+                                />
+                            </label>
+                            <br/>
+                            <br/>
+                            <label>
                                 Text:
                                 <input
                                 type="text"
@@ -77,7 +93,7 @@ const LabelUpdate = () => {
                             <label>
                                 Tag Name:
                                 <input
-                                type="tag_name"
+                                type="text"
                                 value={tagName}
                                 onChange={e => setTagName(e.target.value)}
                                 />
@@ -100,6 +116,16 @@ const LabelUpdate = () => {
                                 type="text"
                                 value={accessibleName}
                                 onChange={e => setAccessibleName(e.target.value)}
+                                />
+                            </label>
+                            <br/>
+                            <br/>
+                            <label>
+                                Class:
+                                <input
+                                type="text"
+                                value={className}
+                                onChange={e => setClassName(e.target.value)}
                                 />
                             </label>
                             <br/>

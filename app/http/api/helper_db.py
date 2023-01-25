@@ -1,7 +1,7 @@
 import os
 from pysondb import db
 
-from app.http.api.helper import strip, image_path, database_path
+from helper import strip, image_path, database_path
 
 
 class HelperDB:
@@ -30,6 +30,7 @@ class HelperDB:
                 "name": data["name"],
                 "placeholder": data["placeholder"],
                 "class": data["class"],
+                "errors": []
             }
             store.add(data)
 

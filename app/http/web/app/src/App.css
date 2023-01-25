@@ -18,7 +18,7 @@ h1 {
 .label-card {
   text-align: center;
   padding: 10px;
-  width: 600px;
+  width: 80%;
   border-radius: 5px;
   padding: 1em;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -27,7 +27,7 @@ h1 {
   text-align: center;
   margin-top: 20px;
   padding: 10px;
-  width: 600px;
+  width: 80%;
   border-radius: 5px;
   padding: 1em;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -43,7 +43,7 @@ img {
 }
 
 table {
-  width: 300px;
+  width: 80%;
   background-color: #FFFFFF;
   border-collapse: collapse;
   border-width: 2px;

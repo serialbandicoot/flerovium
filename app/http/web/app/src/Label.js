@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {useParams, Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import JSONbig from 'json-bigint'
+import ErrorsTable from './Errors';
+import Predict from './Predict';
 
 const Label = () => {
     const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ const Label = () => {
                     <div className='item-container'>
                    
                         <div className='label-card' key={label.id}>
-                        <img src={`http://localhost:5000/image?name=${label.image_name}`} alt='' />
+                        <img src={`http://localhost:5000/image?name=${label.image_name}`} alt={label.image_name} />
             
                         <table className='table-card'>
                         <thead>
@@ -83,6 +85,13 @@ const Label = () => {
                         <br/>
                         <br/>
                         <Link to={`/label/edit/${id}`}>Edit</Link>
+                        <br/>
+                        <br/>
+                        <Predict id={id}/>
+                        <br/>
+                        <br/>
+                        <h1>Errors</h1>
+                        <ErrorsTable fetchLabel={fetchLabel} id={id} errors={label.errors} />
                     </div>
                     
                 </div>

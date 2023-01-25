@@ -1,9 +1,10 @@
 import os
 import shutil
 import tempfile
+import json
 from functools import partial
 from typing import Union
-
+from PIL import Image
 from selenium import webdriver
 
 from src.client import Client
@@ -13,8 +14,13 @@ from src.html_selenium import HTMLSelenium
 from src.html_selenium import Tag
 from src.image_compare import ImageCompare, MatchType
 from src.image_text import ImageText
+from src.logging import Logging
 from src.tag import Tag
-
+from selenium.common.exceptions import WebDriverException
+from keras.preprocessing import image
+from keras.models import load_model
+from operator import itemgetter
+import uuid
 
 class MethodMissing:
     def method_missing(self, name, *args, **kwargs):
@@ -28,22 +34,45 @@ class MethodMissing:
 class Flerovium(MethodMissing):
 
     element = None
+    label   = None
 
     def __init__(self, driver: webdriver):
         self.driver = driver
+        self._training_mode = False
+        self._logging_mode  = False
+        self.fl_id = uuid.uuid4().hex
+        
         HTMLSelenium.release_driver_on_loaded(driver)
 
-    def _evaluate_by_selenium(self, label_data: str):
+    @property
+    def training_mode(self):
+        return self._training_mode
+
+    @training_mode.setter
+    def training_mode(self, training: bool):
+        self._training_mode = training     
+
+    @property
+    def logging_mode(self):
+        return self._logging_mode
+
+    @logging_mode.setter
+    def logging_mode(self, logging: bool):
+        self._logging_mode = logging  
+
+    def _evaluate_by_selenium(self, label_data: dict):
         if label_data is None:
             return None
 
+        tagName = label_data["tag_name"].lower()
+        
         # Links
-        if label_data["tag_name"] == "a" and label_data["text"] != None:
+        if tagName == "a" and label_data["text"] != None and label_data["text"] != '':
             return HTMLSelenium.find_element_by_link(self.driver, label_data["text"])
 
         # Input
-        if label_data["tag_name"] == "input":
-            if label_data["tag_name"] != None:
+        if tagName == "input":
+            if tagName != None:
                 if label_data["name"] != "":
                     return HTMLSelenium.find_element_by_name(
                         self.driver, label_data["name"]
@@ -60,7 +89,7 @@ class Flerovium(MethodMissing):
                     )
 
         # Button
-        if label_data["tag_name"] == "button":
+        if tagName == "button":
             if label_data["name"] != "":
                 e = HTMLSelenium.find_element_by_name(self.driver, label_data["name"])
                 if e.text == label_data["text"]:
@@ -82,6 +111,9 @@ class Flerovium(MethodMissing):
             e = HTMLSelenium.find_element_by_class_name(
                 self.driver, label_data["class"]
             )
+            if e is None:
+                return None
+
             if e.text == label_data["text"]:
                 return e
 
@@ -112,6 +144,60 @@ class Flerovium(MethodMissing):
         else:
             return res
 
+    def _evaluate_by_cnn(self, label: str):
+        classes = ['Login', 'SignIn', 'SignUp']
+        
+        links = HTMLSelenium.get(self.driver, Tag.to_enum("A"))
+        buttons = HTMLSelenium.get(self.driver, Tag.to_enum("BUTTON"))
+        es = links + buttons
+
+        auth_model_path = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            "src", "cnn", "auth_model.h5"
+        )
+        
+        model = load_model(auth_model_path)
+        potentials = []
+        im_width = 64
+        im_height = 48
+
+        for e in es:
+
+            try:
+                local_img = self._create_local_image_file(e)
+
+                img = image.image_utils.load_img(local_img, target_size=(im_height, im_width))
+                img = image.image_utils.img_to_array(img)
+                img = img.reshape((1,) + img.shape)
+                img = img/255.
+
+                y_prob = model.predict(img)
+
+                for idx, result in enumerate(y_prob[0]):
+                    if result * 100 > 95:
+                        print(f"Prediction higher than 80 {result} class {classes[idx]}")
+                        # Compare
+                        ld = label.replace(" ", "").lower()
+                        cls = classes[idx].replace(" ", "").lower()
+                        if cls == ld:
+                            potentials.append({
+                                "img": local_img,
+                                "score": result * 100,
+                                "e": e
+                            })
+                    else:
+                        print(f"{result}")
+                    
+            except WebDriverException:
+                print("continue was never going to compare!")
+                pass
+
+        if len(potentials) > 0:
+            potential = sorted(potentials, key=itemgetter('score'), reverse=True)  
+            return potential[0]['e']
+
+        return None
+
     def _evaluate_by_image(self, label_data, element: str):
         if element and label_data:
             # todo: better check on element data
@@ -126,22 +212,37 @@ class Flerovium(MethodMissing):
 
     def _high_ranking_function(self, label: str):
         label_data = Client().get_by_label(label)
+        found_by_cnn = False
         e = self._evaluate_by_selenium(label_data)
-        if e is None:
+        i = None
+        if e is None and label_data:
+            e = self._evaluate_by_cnn(label_data)
+            if e is not None:
+                found_by_cnn = True     
+        elif e is None and label_data is None:    
             i = None
-        else:
+        
+        # CNN or Selenium could not get e
+        # try with image_eval. More work!
+        if e is None:
             i = self._evaluate_by_image(label_data, e)
 
-        if e != None and i != None:
-            # High Ranking
+        if found_by_cnn:
+            Client().create_label_error(label, e)
+
+        if e != None:
+            # High Ranking           
             return e
-        elif e != None or i != None:
-            # Week Ranking
-            return e
-        else:
-            return None
+
+        return None
+
+    def find_by_cnn(self, label: str):
+        self.label = label
+        self.element = self._evaluate_by_cnn(label)
+        return self
 
     def find_by_label(self, label: str, tag: Union[None, Tag] = None):
+        self.label = label
         hrf_element = self._high_ranking_function(label)
         if hrf_element:
             self.element = hrf_element
@@ -179,16 +280,21 @@ class Flerovium(MethodMissing):
                 self.element = tag_e
                 return self
 
-        # No elements found!
-        self.driver.save_screenshot("error.png")
-
         return self
 
     def method_missing(self, name, *args, **kwargs):
         if name in dir(self.element):
             method = getattr(self.element, name)
             if callable(method):
-                return method(*args, **kwargs)
+                try:
+                    if self.logging_mode:        
+                        Logging().log(self.label, name, self.fl_id, "", self.element, self.driver)
+                    return method(*args, **kwargs)
+                except Exception as e:
+                    # Update Log wil fail
+                    print("TEST FAILURE " + e.msg)
+                    if self.logging_mode:
+                        Logging().log(self.label, name, self.fl_id, e.msg, self.element, self.driver)
             else:
                 raise AttributeError(
                     ' %s has not method named "%s" ' % (self.item, name)
@@ -196,23 +302,5 @@ class Flerovium(MethodMissing):
 
         return None
 
-    def cnn(self, label: str, site: str, save_path: str):
-        file = f"{label}-{site}-{random_string()}"
-        full_path = os.path.join(save_path, f"{file}.png")
-
-        it = ImageText(self.driver)
-        # limit by tag "A" for now
-        tag_a = it.find_by_tag(Tag.A, label, full_path, db_save=False)
-        if tag_a:
-            return self
-
-    def text(self):
-        try:
-            text = self.element.text
-            if text == "":
-                return self.element.get_attribute("value")
-            return text
-        except Exception as e:
-            pass
-
-        return ""
+    def screenshot(self, name="tmp.png"):
+        self.driver.save_screenshot(name)    

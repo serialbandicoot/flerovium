@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotation>
+<folder>images</folder>
+<filename>cf79526f-smh.com.au.png</filename>
+<source>
+<database>MyDatabase</database>
+<annotation>COCO2017</annotation>
+<image>flickr</image>
+<flickrid>NULL</flickrid>
+<annotator>1</annotator>
+</source>
+<owner>
+<flickrid>NULL</flickrid>
+<name>Label Studio</name>
+</owner>
+<size>
+<width>2560</width>
+<height>1856</height>
+<depth>4</depth>
+</size>
+<segmented>0</segmented>
+<object>
+<name>Login</name>
+<pose>Unspecified</pose>
+<truncated>0</truncated>
+<difficult>0</difficult>
+<bndbox>
+<xmin>2316</xmin>
+<ymin>588</ymin>
+<xmax>2425</xmax>
+<ymax>650</ymax>
+</bndbox>
+</object>
+</annotation>
