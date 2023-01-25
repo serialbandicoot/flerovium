@@ -28,7 +28,7 @@ class HelperCNN:
                br = "5px",
                p  = "10px 130px 10px 130px",
                ls = "1px",
-               tx = "Sign In"):
+               tx = "Login"):
     
         for _ in range(self.qty):
             h1 = "%06x" % randint(0, 0xFFFFFF)
@@ -119,7 +119,6 @@ class HTMLSelenium:
         self.driver.get("file:///Users/sam.treweek/Projects/flerovium/cnn.html")
 
     def release_driver_on_loaded(self):
-        driver = self.driver
         wait = WebDriverWait(self.driver, 15)
         jquery, document_ready = False, False
         try:
@@ -158,7 +157,7 @@ class HTMLSelenium:
         buttons = self.get("BUTTON")
         element_names = []
         for element in buttons:
-            file_name = f"sign_in_{self.random_string()}.png"
+            file_name = f"login_{self.random_string()}.png"
             element_names.append(file_name)
             file = os.path.join(tempfile.gettempdir(), file_name)
             f = open(file, "wb")
@@ -176,13 +175,13 @@ class HTMLSelenium:
 
         with open(file, "a") as myfile:
             for ln in element_names:
-                line = f"{ln},2\n"
+                line = f"{ln},1\n"
                 myfile.write(line)
         
-        print("DONE!")
+        return {
+            "ok": True
+        }
 
-
-HelperCNN(200).button().generate().create_images()
-
+# HelperCNN(200).button().generate().create_images()
 
 

@@ -192,9 +192,9 @@ def logging_by_fl_id(id):
 def predict(id):
     return json.dumps(CNN().predict(id))
 
-@app.route("/generate")
-def generate():
-    return json.dumps(HelperCNN().generate_button())
+@app.route("/generate/<id>", methods=["GET"])
+def generate(id):
+    return json.dumps(HelperCNN(id).button().generate().create_images())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

@@ -28,6 +28,6 @@ class TestFindByLabel(unittest.TestCase):
         fl.find_by_cnn("Sign In").click()
         fl.find_by_label("Email or phone number").send_keys("sam@test.com")
         fl.find_by_label("Password").send_keys("pass")
-        fl.find_by_label("Sign In 2").click()
+        fl.find_by_cnn("Sign In").click()
         fl.screenshot()
         
