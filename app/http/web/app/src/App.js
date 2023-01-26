@@ -25,7 +25,7 @@ function App() {
           <Route exact path="/label/edit/:id" element={<LabelUpdate/>}/>
           <Route exact path="/logging" element={<Logging/>}/>
           <Route exact path="/logging/fl/:id" element={<LoggingByRun/>}/>
-          <Route exact path="/builder" element={<ButtonBuilder/>}/>
+          <Route exact path="/button_builder" element={<ButtonBuilder/>}/>
         </Routes>
       </BrowserRouter>
 

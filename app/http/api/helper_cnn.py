@@ -17,7 +17,9 @@ class HelperCNN:
     style = []
     html  = []
     
-    def __init__(self, qty=2) -> None:
+    def __init__(self, cnn_name: str, class_id: int, qty=2) -> None:
+        self.cnn_name = cnn_name
+        self.class_id = class_id
         self.qty = qty
 
     def button(self, 
@@ -101,16 +103,20 @@ class HelperCNN:
         doc = head + style_start + style + style_end + main + foot 
         f = open("cnn.html", "w")
         f.write(doc)
+        f.close()
 
         return self
 
     def create_images(self):
-        html_selenium = HTMLSelenium()
+        html_selenium = HTMLSelenium(self.cnn_name, self.class_id)
         html_selenium.create_images()
 
 class HTMLSelenium:
     
-    def __init__(self) -> None:
+    def __init__(self, prefix: str, class_id: int) -> None:
+        self.prefix = prefix
+        self.class_id = class_id
+
         options = Options()
         options.headless = True
 
@@ -148,7 +154,6 @@ class HTMLSelenium:
         self.release_driver_on_loaded()
         return self.driver.find_elements(By.TAG_NAME, tag)
 
-
     def random_string(self):
         letters = string.ascii_lowercase
         return "".join(random.choice(letters) for i in range(10))
@@ -156,32 +161,42 @@ class HTMLSelenium:
     def create_images(self):
         buttons = self.get("BUTTON")
         element_names = []
+
+        #Clean Dir
+        self._empty_tmp2()
+
         for element in buttons:
-            file_name = f"login_{self.random_string()}.png"
+            file_name = f"{self.prefix.lower()}_{self.random_string()}.png"
             element_names.append(file_name)
             file = os.path.join(tempfile.gettempdir(), file_name)
             f = open(file, "wb")
             f.write(element.screenshot_as_png)
             f.close()
-            shutil.move(file, f"/Users/sam.treweek/Projects/flerovium/keras_notebooks/auth_data/tmp2/{file_name}") 
+            shutil.move(file, os.path.join(self._get_tmp2_location(), file_name))
 
         self.create_labels_file(element_names)
 
     def create_labels_file(self, element_names):
-        file = f"/Users/sam.treweek/Projects/flerovium/keras_notebooks/auth_data/tmp2/labels-1.csv"
+        file = os.path.join(self._get_tmp2_location(), "labels-1.csv")
         f = open(file, "w")
         f.write("file,label\n")
         f.close()
 
         with open(file, "a") as myfile:
             for ln in element_names:
-                line = f"{ln},1\n"
+                line = f"{ln},{self.class_id}\n"
                 myfile.write(line)
         
         return {
             "ok": True
         }
 
-# HelperCNN(200).button().generate().create_images()
+    def _empty_tmp2(self):
+        dir = self._get_tmp2_location()
+        if os.path.exists(dir):
+            shutil.rmtree(dir)
+        os.makedirs(dir)
 
-
+    def _get_tmp2_location(self):
+        root = os.path.join(os.getcwd(), "keras_notebooks", "auth_data", "tmp2")
+        return root

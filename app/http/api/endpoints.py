@@ -192,9 +192,25 @@ def logging_by_fl_id(id):
 def predict(id):
     return json.dumps(CNN().predict(id))
 
-@app.route("/generate/<id>", methods=["GET"])
-def generate(id):
-    return json.dumps(HelperCNN(id).button().generate().create_images())
+@app.route("/generate", methods=["PUT"])
+def generate():
+    args = request.json
+    if args["type"] == "BUTTON":
+        qty = int(args["qty"])
+        c  = args["color"]
+        bc = args["background-color"]
+        fs = args["font-size"]
+        b  = args["border"]
+        br = "5px"
+        p  = args["padding"]
+        ls = args["letter-spacing"]
+        tx = args["text"]
+        class_int = 4 #todo: move to Builder
+        return json.dumps(HelperCNN(tx, class_int, qty).button(c, bc, fs, b, br, p, ls, tx).generate().create_images())
+
+    return json.dumps({
+        "ok": True
+    })
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

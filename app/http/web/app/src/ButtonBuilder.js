@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ButtonBuilder = () => {
   const [qty, setQty] = useState("5");
-  const [label, setLabel] = useState("Preview");
+  const [text, setText] = useState("Preview");
   const [sColor, setColor] = useState("#ffffff");
   const [sBackgroundColor, setBackgroundColor] = useState("#e50a14");
   const [sFontSize, setFontSize] = useState("16px");
@@ -14,9 +14,19 @@ const ButtonBuilder = () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    let url = `http://localhost:5000/generate/${qty}`
+    let url = `http://localhost:5000/generate`
     axios.put(url, {
-        "label": label,
+        "qty": qty,
+        "text": text,
+        "color": sColor,
+        "background-color": sBackgroundColor,
+        "font-size": sFontSize,
+        "border": sBorder,
+        "padding": sPadding,
+        "letter-spacing": sLetterSpacing,
+        "margin": sMargin,
+        "type": "BUTTON"
+
     })
     .then((res)=> {
         console.log(res.data)
@@ -26,13 +36,13 @@ const ButtonBuilder = () => {
 
   return (
     <div>
-    <form class="small_form" onSubmit={handleSubmit}>
+    <form className="small_form" onSubmit={handleSubmit}>
     <label>
         Label:
         <input
           type="text"
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
         />
       </label>
       <label>
@@ -119,7 +129,7 @@ const ButtonBuilder = () => {
         <input type="submit" value="Generate" />
       </div>
     </form>
-        <div class="body">
+        <div className="body">
             <h3>Preview</h3>
             <button style={{ color: sColor, 
                 backgroundColor: sBackgroundColor,
@@ -127,7 +137,7 @@ const ButtonBuilder = () => {
                 border: sBorder,
                 padding: sPadding,
                 letterSpacing: sLetterSpacing,
-                margin: sMargin }} type="button">{label}</button>
+                margin: sMargin }} type="button">{text}</button>
         </div>
     </div>
 
