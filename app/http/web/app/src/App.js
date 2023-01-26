@@ -13,6 +13,7 @@ import LabelUpdate from './LabelEdit';
 import Logging from './Logging';
 import LoggingByRun from './LoggingByRun';
 import LabelByLabel from './LabeByLabel';
+import ButtonBuilder from './ButtonBuilder';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route exact path="/label/edit/:id" element={<LabelUpdate/>}/>
           <Route exact path="/logging" element={<Logging/>}/>
           <Route exact path="/logging/fl/:id" element={<LoggingByRun/>}/>
+          <Route exact path="/builder" element={<ButtonBuilder/>}/>
         </Routes>
       </BrowserRouter>
 

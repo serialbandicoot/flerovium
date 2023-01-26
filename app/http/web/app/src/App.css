@@ -62,3 +62,18 @@ table td, table th {
 table thead {
   background-color: #7ea8f8;
 }
+
+input {
+  width: 100%;
+}
+
+.small_form {
+  padding-top: 20px;
+  padding-left: 20px;
+  width: 20%;
+}
+
+.body {
+  padding-top: 20px;
+  padding-left: 20px;
+}
